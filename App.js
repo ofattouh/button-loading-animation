@@ -1,23 +1,61 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { Text, StyleSheet, View, SafeAreaView, Platform, UIManager } from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import Button from './Button';
+
+export default class App extends Component {
+  constructor(props){  
+    super(props);
+    
+    // Disabled by default on Android
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+
+  state = {
+    loading: false,
+  };
+  
+  handleButtonPress = (loading) => {
+    this.setState({ loading });
+  }
+
+  render() {
+    const { loading } = this.state;
+
+    return (
+      <SafeAreaView style={[styles.main]}>
+        <Text style={styles.toolbar}>Animated containers</Text>
+
+        <View style={styles.content}>
+          <Button label="Login" loading={loading} onPress={this.handleButtonPress}/>
+        </View>
+      </SafeAreaView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  main: {
     flex: 1,
-    backgroundColor: '#fff',
+  },
+  toolbar: {
+    backgroundColor: '#f39c12',
+    color: '#fff',
+    fontSize: 22,
+    padding: 20,
+    textAlign: 'center',
+  },
+  content: {
+    padding: 10,
+    backgroundColor: '#ecf0f1',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }
 });
 
 // expo init my-app
+// https://reactnative.dev/docs/animated
+// https://reactnative.dev/docs/easing
